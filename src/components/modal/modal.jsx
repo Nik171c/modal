@@ -1,22 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ModalWrapper from './modal-wrapper'
 import ModalHeader from './modal-header'
-import ModalClose from'./modal-close'
+import ModalClose from './modal-close'
 import ModalFooter from './modal-footer'
 import ModalBody from './modal-body'
 import './modal.css'
 
-export default function Modal({children, close}) {
+export default function Modal({ children, close, title, firstFooterButtonText, firstFooterButtonClick, secondFooterButtonText, secondFooterButtonClick }) {
+    const handleOverlayClick = (evt) => {
+        evt.stopPropagation();
+        if (evt.target.classList.contains('modal')) {
+            close()
+        }
+    }
+    useEffect(() => {
+        const handleKeyDown = ({ key }) => {
+            if (key === "Escape") {
+                close();
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown)
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [])
 
     return (
-        <ModalWrapper>
-            <ModalBody>
+
+        <div
+            className="modal"
+            onClick={handleOverlayClick}
+        >
+            <ModalWrapper>
                 <ModalHeader>
-                    <ModalClose onClick={close}/>
+                    {title}
+                    <ModalClose onClick={close} />
                 </ModalHeader>
-                {children}
-                <ModalFooter firstText='111111' />
-            </ModalBody>
-        </ModalWrapper>
+                <ModalBody>
+                    {children}
+                </ModalBody>
+                <ModalFooter
+                    firstText={firstFooterButtonText}
+                    firstClick={firstFooterButtonClick}
+                    secondaryText={secondFooterButtonText}
+                    secondaryClick={secondFooterButtonClick}
+                />
+            </ModalWrapper>
+        </div>
     )
 }

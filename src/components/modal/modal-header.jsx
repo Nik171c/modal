@@ -1,11 +1,13 @@
 import React from "react";
 
 
-export default function ModalHeader({children}) {
-    
+export default function ModalHeader({ children }) {
+
 
 
     return (
-<h2 className="modal-title">{children}</h2>
+        <header className="modal-header">
+            {children}
+        </header>
     )
 }
